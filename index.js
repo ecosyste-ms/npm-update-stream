@@ -1,6 +1,6 @@
 var ChangesStream = require('@npmcorp/changes-stream');
-var Redis = require("redis");
-var redis = Redis.createClient({host: process.env.REDIS_URL || 'redis'});
+var Redis = require("ioredis");
+var redis = new Redis(process.env.REDIS_URL);
 var express = require('express');
 var cors = require('cors');
 var app = express();
