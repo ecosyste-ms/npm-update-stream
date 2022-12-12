@@ -1,13 +1,12 @@
-# [npm update stream](https://libraries.io/github/librariesio/npm-update-stream)
+# npm update stream
 
-A feed of names of recently updated node modules from npm for [Libraries.io](https://libraries.io)
+A feed of names of recently updated packages from npm for [packages.ecosyste.ms](https://packages.ecosyste.ms)
 
 ## Install
 
 ```bash
-git clone https://github.com/librariesio/npm-update-stream.git
-npm install -g yarn
-yarn install
+git clone https://github.com/ecosyste-ms/npm-update-stream.git
+npm install
 ```
 
 ## Getting started
@@ -21,8 +20,8 @@ $> node index.js
 
 ## Development
 
-Source hosted at [GitHub](http://github.com/librariesio/npm-update-stream).
-Report Issues/Feature requests on [GitHub Issues](http://github.com/librariesio/npm-update-stream/issues).
+Source hosted at [GitHub](http://github.com/ecosyste-ms/npm-update-stream).
+Report Issues/Feature requests on [GitHub Issues](http://github.com/ecosyste-ms/npm-update-stream/issues).
 
 ### Note on Patches/Pull Requests
 
@@ -33,4 +32,4 @@ Report Issues/Feature requests on [GitHub Issues](http://github.com/librariesio/
 
 ## License
 
-Copyright (c) 2017 Andrew Nesbitt, Licensed under GNU Affero General Public License. See [LICENSE](https://github.com/librariesio/npm-update-stream/blob/master/LICENSE.txt) for details.
+Copyright (c) 2022 Andrew Nesbitt, Licensed under GNU Affero General Public License. See [LICENSE](https://github.com/ecosyste-ms/npm-update-stream/blob/master/LICENSE.txt) for details.
