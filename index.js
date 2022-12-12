@@ -1,4 +1,4 @@
-var ChangesStream = require('changes-stream');
+var ChangesStream = require('@npmcorp/changes-stream');
 var Redis = require("redis");
 var redis = Redis.createClient({host: process.env.REDIS_URL || 'redis'});
 var express = require('express');
@@ -6,7 +6,7 @@ var cors = require('cors');
 var app = express();
 
 var changes = new ChangesStream({
-  db: 'https://replicate.npmjs.com/registry',
+  db: 'https://replicate.npmjs.com/_changes',
   include_docs: true,
   since: 'now'
 });
