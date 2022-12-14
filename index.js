@@ -8,7 +8,8 @@ var app = express();
 var changes = new ChangesStream({
   db: 'https://replicate.npmjs.com/_changes',
   include_docs: true,
-  since: 'now'
+  since: 'now',
+  inactivity_ms: 60 * 1000
 });
 
 changes.on('data', function (change) {
