@@ -4,7 +4,7 @@
   "description": "JSON API of recent updates streamed from npm",
   "main": "index.js",
   "engines": {
-    "node": "19.7.0"
+    "node": "19.8.1"
   },
   "author": "Andrew Nesbitt",
   "license": "AGPL-3.0",
