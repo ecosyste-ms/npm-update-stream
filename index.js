@@ -1,23 +1,22 @@
-var ChangesStream = require('@npmcorp/changes-stream');
+const ChangesStream = require('changes-stream');
 var Redis = require("ioredis");
 var redis = new Redis(process.env.REDIS_URL);
 var express = require('express');
 var cors = require('cors');
 var app = express();
 
-var changes = new ChangesStream({
-  db: 'https://replicate.npmjs.com/_changes',
-  include_docs: true,
-  since: 'now',
-  inactivity_ms: 60 * 1000
+const changes = new ChangesStream({
+  db: 'https://replicate.npmjs.com/registry'
 });
 
 changes.on('data', function (change) {
-  var name = change.doc.name
-  if(name){
-    console.log(name)
-    redis.lpush('npm-updated-names', name)
-  }
+  change.results.forEach(function (result) {
+    var name = result.id
+    if(name){
+      console.log(name)
+      redis.lpush('npm-updated-names', name)
+    }
+  });
 })
 
 app.get('/', function (req, res) {

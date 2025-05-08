@@ -9,7 +9,7 @@
   "author": "Andrew Nesbitt",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@npmcorp/changes-stream": "^3.1.1",
+    "changes-stream": "github:ecosyste-ms/changes-stream",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "ioredis": "^5.6.1"
