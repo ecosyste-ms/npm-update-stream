@@ -1,21 +1,20 @@
-var ChangesStream = require('@npmcorp/changes-stream');
+const ChangesStream = require('changes-stream');
 var https = require('https');
 
-var changes = new ChangesStream({
-  db: 'https://replicate.npmjs.com/_changes',
-  include_docs: true,
-  since: 'now',
-  inactivity_ms: 60 * 1000
+const changes = new ChangesStream({
+  db: 'https://replicate.npmjs.com/registry'
 });
 
 changes.on('data', function (change) {
   
-  var name = change.doc.name
+  change.results.forEach(function (result) {
+    var name = result.id
+    if(name){
+      console.log(name)
+      https.get('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/'+ name +'/ping', function(res) {
+        console.log(`statusCode: ${res.statusCode}`)
+      })
+    }
+  });  
 
-  if(name){
-    console.log(name)
-    https.get('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/'+ name +'/ping', function(res) {
-      console.log(`statusCode: ${res.statusCode}`)
-    })
-  }
 })
