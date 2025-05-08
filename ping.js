@@ -1,21 +1,33 @@
-const ChangesStream = require('changes-stream');
-var https = require('https');
+(async () => {
+  const info = await fetch("https://replicate.npmjs.com/", {
+    headers: { 'npm-replication-opt-in': 'true' }
+  }).then(res => res.json())
 
-const changes = new ChangesStream({
-  db: 'https://replicate.npmjs.com/registry'
-});
+  let since = info.update_seq.toString()
+  console.log("since", since)
+  const limit = (100).toString()
 
-changes.on('data', function (change) {
-  
-  change.results.forEach(function (result) {
-    var name = result.id
-    if(name){
-      console.log(name)
-      const cacheBuster = Math.floor(Math.random() * 1000000);
-      https.get('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/' + name + '/ping?cb=' + cacheBuster, function(res) {
-        console.log(`statusCode: ${res.statusCode}`)
-      })
+  while (true) {
+    const changes = await fetch(`https://replicate.npmjs.com/_changes?since=${since}&limit=${limit}`, {
+      headers: { 'npm-replication-opt-in': 'true' }
+    }).then(res => res.json())
+
+    for (const change of changes.results) {
+      if (change.deleted) continue
+
+      const name = change.id
+      if (name) {
+        console.log(name)
+        const cacheBuster = Math.floor(Math.random() * 1000000)
+        fetch('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/' + name + '/ping?cb=' + cacheBuster)
+          .then(res => console.log(`statusCode: ${res.status}`))
+      }
     }
-  });  
 
-})
+    if (changes.results.length === 0) {
+      await new Promise(resolve => setTimeout(resolve, 5000)) // wait 5 seconds
+    }
+
+    since = changes.last_seq.toString()
+  }
+})()
