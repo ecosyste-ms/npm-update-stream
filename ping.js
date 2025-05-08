@@ -11,7 +11,8 @@ changes.on('data', function (change) {
     var name = result.id
     if(name){
       console.log(name)
-      https.get('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/'+ name +'/ping', function(res) {
+      const cacheBuster = Math.floor(Math.random() * 1000000);
+      https.get('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/' + name + '/ping?cb=' + cacheBuster, function(res) {
         console.log(`statusCode: ${res.statusCode}`)
       })
     }
