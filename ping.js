@@ -19,7 +19,9 @@
       if (name) {
         console.log(name)
         const cacheBuster = Math.floor(Math.random() * 1000000)
-        fetch('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/' + name + '/ping?cb=' + cacheBuster)
+        fetch('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/' + name + '/ping?cb=' + cacheBuster, {
+          headers: { 'User-Agent': 'npm-update-stream' }
+        })
           .then(res => console.log(`statusCode: ${res.status}`))
       }
     }
