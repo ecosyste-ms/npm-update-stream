@@ -1,9 +1,9 @@
-var Redis = require("ioredis");
-var redis = new Redis(process.env.REDIS_URL);
 var express = require('express');
 var cors = require('cors');
 var app = express();
 app.use(cors());
+
+var updatedNames = [];
 
 (async () => {
   const info = await fetch("https://replicate.npmjs.com/", {
@@ -25,7 +25,10 @@ app.use(cors());
       const name = change.id
       if (name) {
         console.log(name)
-        redis.lpush('npm-updated-names', name)
+        updatedNames.unshift(name)
+        if (updatedNames.length > 5000) {
+          updatedNames = updatedNames.slice(0, 5000)
+        }
       }
     }
 
@@ -38,15 +41,11 @@ app.use(cors());
 })()
 
 app.get('/', function (req, res) {
-  redis.lrange('npm-updated-names', 0, 200, function (err, replies) {
-    res.json([...new Set(replies)]);
-  });
+  res.json([...new Set(updatedNames.slice(0, 200))]);
 })
 
 app.get('/recent', function (req, res) {
-  redis.lrange('npm-updated-names', 0, 5000, function (err, replies) {
-    res.json([...new Set(replies)]);
-  });
+  res.json([...new Set(updatedNames)]);
 })
 
 var port = process.env.PORT || 5001;
