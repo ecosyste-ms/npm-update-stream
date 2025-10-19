@@ -21,7 +21,7 @@
         const cacheBuster = Math.floor(Math.random() * 1000000)
         fetch('https://packages.ecosyste.ms/api/v1/registries/npmjs.org/packages/' + name + '/ping?cb=' + cacheBuster, {
           headers: {
-            'User-Agent': 'npm-update-stream',
+            'User-Agent': 'npm.ecosyste.ms',
             'X-API-Key': process.env.ECOSYSTEMS_API_KEY
           }
         })
