@@ -1,9 +1,7 @@
-var express = require('express');
-var cors = require('cors');
-var app = express();
-app.use(cors());
+var { createApp } = require('./app');
 
 var updatedNames = [];
+var app = createApp(updatedNames);
 
 (async () => {
   const info = await fetch("https://replicate.npmjs.com/", {
@@ -39,14 +37,6 @@ var updatedNames = [];
     since = changes.last_seq.toString()
   }
 })()
-
-app.get('/', function (req, res) {
-  res.json([...new Set(updatedNames.slice(0, 200))]);
-})
-
-app.get('/recent', function (req, res) {
-  res.json([...new Set(updatedNames)]);
-})
 
 var port = process.env.PORT || 5001;
 app.listen(port, function() {

@@ -6,6 +6,9 @@
   "engines": {
     "node": "19.8.1"
   },
+  "scripts": {
+    "test": "node --test test/"
+  },
   "author": "Andrew Nesbitt",
   "license": "AGPL-3.0",
   "dependencies": {
