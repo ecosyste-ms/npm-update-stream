@@ -1,0 +1,31 @@
+test/app.test.js
+  a4861e0edb2cc3fc 7-10,17-18,42-43,79-80,120-121,160-161,183-243,248-249
+package.json
+  a4861e0edb2cc3fc 14
+app.js
+  a4861e0edb2cc3fc 1,4-5,7-29,31-32,35
+Dockerfile
+  a4861e0edb2cc3fc 6
+index.js
+  a4861e0edb2cc3fc 4,42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "00db33084a72fa7985ef6e5214d6fd1e857d3366",
+  "prompts": {
+    "a4861e0edb2cc3fc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce6f8676-f7eb-4a4a-a325-4350e49427d7",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Andrew Nesbitt <andrewnez@gmail.com>",
+      "messages": [],
+      "total_additions": 115,
+      "total_deletions": 39,
+      "accepted_lines": 111,
+      "overriden_lines": 0
+    }
+  }
+}
