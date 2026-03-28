@@ -1,7 +1,7 @@
 var { createApp } = require('./app');
 
 var updatedNames = [];
-var app = createApp(updatedNames);
+var server = createApp(updatedNames);
 
 (async () => {
   const info = await fetch("https://replicate.npmjs.com/", {
@@ -39,6 +39,6 @@ var app = createApp(updatedNames);
 })()
 
 var port = process.env.PORT || 5001;
-app.listen(port, function() {
+server.listen(port, function() {
   console.log('Listening on', port);
 });

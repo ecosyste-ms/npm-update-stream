@@ -4,13 +4,18 @@ var http = require('node:http');
 var { createApp } = require('../app');
 
 function request(server, path) {
+  return requestWithMethod(server, path, 'GET');
+}
+
+function requestWithMethod(server, path, method, headers) {
   return new Promise((resolve, reject) => {
     var address = server.address();
     var req = http.request({
       hostname: 'localhost',
       port: address.port,
       path: path,
-      method: 'GET'
+      method: method,
+      headers: headers || {}
     }, (res) => {
       var body = '';
       res.on('data', chunk => body += chunk);
@@ -34,8 +39,8 @@ describe('GET /', () => {
 
   before(() => {
     updatedNames = [];
-    var app = createApp(updatedNames);
-    server = app.listen(0);
+    server = createApp(updatedNames);
+    server.listen(0);
   });
 
   after(() => {
@@ -71,8 +76,8 @@ describe('GET / with data', () => {
 
   before(() => {
     updatedNames = ['pkg-a', 'pkg-b', 'pkg-c'];
-    var app = createApp(updatedNames);
-    server = app.listen(0);
+    server = createApp(updatedNames);
+    server.listen(0);
   });
 
   after(() => {
@@ -112,8 +117,8 @@ describe('GET /recent', () => {
 
   before(() => {
     updatedNames = [];
-    var app = createApp(updatedNames);
-    server = app.listen(0);
+    server = createApp(updatedNames);
+    server.listen(0);
   });
 
   after(() => {
@@ -152,8 +157,8 @@ describe('GET /recent with data', () => {
     for (var i = 0; i < 500; i++) {
       updatedNames.push('pkg-' + i);
     }
-    var app = createApp(updatedNames);
-    server = app.listen(0);
+    server = createApp(updatedNames);
+    server.listen(0);
   });
 
   after(() => {
@@ -175,12 +180,73 @@ describe('GET /recent with data', () => {
   });
 });
 
+describe('Content-Type details', () => {
+  var server;
+
+  before(() => {
+    server = createApp(['pkg-a']);
+    server.listen(0);
+  });
+
+  after(() => {
+    server.close();
+  });
+
+  it('includes charset in Content-Type on /', async () => {
+    var res = await request(server, '/');
+    assert.ok(res.headers['content-type'].includes('charset'));
+  });
+
+  it('includes charset in Content-Type on /recent', async () => {
+    var res = await request(server, '/recent');
+    assert.ok(res.headers['content-type'].includes('charset'));
+  });
+});
+
+describe('CORS preflight', () => {
+  var server;
+
+  before(() => {
+    server = createApp([]);
+    server.listen(0);
+  });
+
+  after(() => {
+    server.close();
+  });
+
+  it('responds to OPTIONS with 204', async () => {
+    var res = await requestWithMethod(server, '/', 'OPTIONS', {
+      'Origin': 'http://example.com',
+      'Access-Control-Request-Method': 'GET'
+    });
+    assert.strictEqual(res.status, 204);
+  });
+
+  it('includes CORS headers on OPTIONS', async () => {
+    var res = await requestWithMethod(server, '/', 'OPTIONS', {
+      'Origin': 'http://example.com',
+      'Access-Control-Request-Method': 'GET'
+    });
+    assert.strictEqual(res.headers['access-control-allow-origin'], '*');
+  });
+
+  it('includes allowed methods on OPTIONS', async () => {
+    var res = await requestWithMethod(server, '/', 'OPTIONS', {
+      'Origin': 'http://example.com',
+      'Access-Control-Request-Method': 'GET'
+    });
+    assert.ok(res.headers['access-control-allow-methods']);
+    assert.ok(res.headers['access-control-allow-methods'].includes('GET'));
+  });
+});
+
 describe('404 handling', () => {
   var server;
 
   before(() => {
-    var app = createApp([]);
-    server = app.listen(0);
+    server = createApp([]);
+    server.listen(0);
   });
 
   after(() => {

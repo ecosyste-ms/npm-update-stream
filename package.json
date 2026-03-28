@@ -11,8 +11,5 @@
   },
   "author": "Andrew Nesbitt",
   "license": "AGPL-3.0",
-  "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^5.2.1"
-  }
+  "dependencies": {}
 }
